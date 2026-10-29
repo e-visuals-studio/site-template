@@ -1,0 +1,40 @@
+---
+import Hero from '@e-visuals-studio/core/blocks/Hero.astro';
+import About from '@e-visuals-studio/core/blocks/About.astro';
+import CTA from '@e-visuals-studio/core/blocks/CTA.astro';
+import { breadcrumbList } from '@e-visuals-studio/core';
+import { paragraphs, t } from '@e-visuals-studio/core/brief';
+import Page from '../components/Page.astro';
+import { brief } from '../brief';
+import { routes, ui, type Lang } from '../i18n';
+import { image } from '../images';
+import { cta, describe, siteName } from '../site';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const s = ui[lang];
+const text = paragraphs(brief.stranka.oNas, lang);
+const about = image(brief.slike.oNas, lang);
+---
+
+<Page
+  lang={lang}
+  page="about"
+  title={s.about}
+  description={describe(lang, `${s.about} – ${siteName}.`, text[0] ?? '')}
+  image={about.src}
+  imageAlt={about.alt}
+  jsonLd={breadcrumbList([
+    { name: s.home, url: new URL(routes[lang].home, Astro.site) },
+    { name: s.about, url: new URL(routes[lang].about, Astro.site) },
+  ])}
+>
+  <Hero eyebrow={siteName} title={s.about} lead={t(brief.stranka.dejavnost, lang)} />
+  <About title={siteName} image={about}>
+    {text.map((p) => <p>{p}</p>)}
+  </About>
+  <CTA title={s.ctaTitle} text={s.ctaText} cta={cta(lang)} />
+</Page>

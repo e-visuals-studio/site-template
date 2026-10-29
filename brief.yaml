@@ -1,0 +1,90 @@
+# brief.yaml – EDINI vir podatkov o stranki (glej CLAUDE.md).
+#
+# Pravila:
+# - vsak ključ je obvezen; manjkajočo vrednost označi z "TODO" ali "TODO: kaj manjka" – nikoli si je ne izmisli
+# - TODO je dovoljen med razvojem in v preview buildu; produkcijski build ustavi `pnpm check:todo`
+# - besedila so po jezikih { sl: …, en: … }; `en` je obvezen, ko jeziki vsebuje en
+# - shema in preverjanje: @e-visuals-studio/core/brief (napaka pove pot do polja)
+# - izmišljen izpolnjen primer: primer/brief.yaml (`pnpm build:primer`)
+
+stranka:
+  ime: TODO
+  # Kratko, npr. "Mizarstvo v Kamniku" (naslov domače strani, slogan na OG sliki)
+  dejavnost: { sl: TODO }
+  # Opis za iskalnike (meta description domače strani), 50–160 znakov
+  opis: { sl: TODO }
+  # Uvodni odstavek na domači strani
+  uvod: { sl: TODO }
+  # O nas; odstavki ločeni s prazno vrstico
+  oNas: { sl: TODO }
+  # schema.org podtip LocalBusiness, npr. HomeAndConstructionBusiness, Dentist, Restaurant
+  schemaTip: TODO
+
+# Produkcijska domena z https, npr. https://www.stranka.si
+domena: TODO
+# sl je vedno prvi; dodaj en za angleške strani
+jeziki: [sl]
+
+kontakt:
+  email: TODO
+  # Mednarodna oblika, npr. +386 1 234 56 78
+  telefon: TODO
+
+naslov:
+  ulica: TODO
+  postnaStevilka: TODO
+  kraj: TODO
+  drzava: SI
+
+lokacija:
+  # Območje storitev, npr. "Osrednjeslovenska regija"
+  obmocje: TODO
+  # { lat: 46.05, lng: 14.5 } ali null
+  geo: null
+
+# Dnevi: Mo Tu We Th Fr Sa Su, čas HH:MM; [] = ne prikaži (npr. samo po dogovoru)
+delovniCas:
+  - { dnevi: TODO, od: TODO, do: TODO }
+
+storitve:
+  - ime: { sl: TODO }
+    opis: { sl: TODO }
+
+# Neobvezni seznami: [] je v redu, a ključ mora ostati.
+# - { vprasanje: { sl: … }, odgovor: { sl: … } }
+pogostaVprasanja: []
+# Samo prave reference z dovoljenjem stranke; nikoli izmišljene ali AI slike.
+# - { naslov: { sl: … }, slika: { datoteka: src/assets/…, alt: { sl: … } } }
+reference: []
+# https URL-ji profilov (Facebook, Instagram, Google Business Profile …)
+socialnaOmrezja: []
+
+kljucneBesede:
+  sl: [TODO]
+
+analitika:
+  # none | umami | plausible | ga4 (ga4 samo kot izjema, zapis v EXCEPTIONS.md v factory-core)
+  # ID (websiteId / measurementId) NI tu: nastavi ga v okolju kot ANALYTICS_ID.
+  ponudnik: TODO
+  # Za umami in plausible: URL sledilne skripte; sicer null
+  scriptUrl: null
+
+pravno:
+  # Polni naziv, npr. "Primer d.o.o."
+  naziv: TODO
+  # 7 ali 10 števk
+  maticna: TODO
+  # SI + 8 števk
+  davcna: TODO
+  # npr. "Primerna ulica 1, 1000 Ljubljana"
+  sedez: TODO
+
+# Vsaka slika mora imeti zapis v assets.licenses.yaml (avtor, vir, licenca), sicer build pade.
+# Manjkajoča prava fotografija = placeholder (pnpm placeholders) + TODO v alt.
+slike:
+  hero:
+    datoteka: src/assets/placeholders/hero.jpg
+    alt: { sl: 'TODO: prava fotografija (kaj prikazuje)' }
+  oNas:
+    datoteka: src/assets/placeholders/about.jpg
+    alt: { sl: 'TODO: prava fotografija (kaj prikazuje)' }

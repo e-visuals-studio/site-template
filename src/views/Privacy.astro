@@ -1,0 +1,43 @@
+---
+/**
+ * Politika zasebnosti: podatki o upravljavcu in analitiki iz briefa + pravno besedilo iz src/content/pravno/
+ * (v templatu TODO do pregleda pravnika; check:todo zato ustavi produkcijski build, dokler ga ni).
+ */
+import { getEntry, render } from 'astro:content';
+import Hero from '@e-visuals-studio/core/blocks/Hero.astro';
+import { isTodo } from '@e-visuals-studio/core/brief';
+import Page from '../components/Page.astro';
+import { brief } from '../brief';
+import { ui, type Lang } from '../i18n';
+import { describe, siteName } from '../site';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const s = ui[lang];
+const entry = await getEntry('pravno', `zasebnost.${lang}`);
+if (!entry) throw new Error(`Manjka pravno besedilo zasebnost.${lang}.md (src/content/pravno/).`);
+const { Content } = await render(entry);
+const { naziv, sedez, maticna, davcna } = brief.pravno;
+const provider = isTodo(brief.analitika.ponudnik) ? brief.analitika.ponudnik : s.analyticsText[brief.analitika.ponudnik];
+---
+
+<Page lang={lang} page="privacy" title={s.privacy} description={describe(lang, `${s.privacyIntro} – ${siteName}.`)}>
+  <Hero eyebrow={siteName} title={s.privacy} lead={s.privacyIntro} />
+  <div class="wrap-prose prose-factory pb-section">
+    <h2>{s.controller}</h2>
+    <p>
+      {naziv}, {sedez}<br />
+      {lang === 'sl' ? 'Matična številka' : 'Registration number'}: {maticna} · {lang === 'sl' ? 'ID za DDV' : 'VAT ID'}: {davcna}
+    </p>
+    <h2>{s.contactPrivacy}</h2>
+    <p>
+      <a href={`mailto:${brief.kontakt.email}`}>{brief.kontakt.email}</a> · {brief.kontakt.telefon}
+    </p>
+    <h2>{s.analytics}</h2>
+    <p>{provider}</p>
+    <Content />
+  </div>
+</Page>

@@ -1,0 +1,24 @@
+---
+import BlogList from '@e-visuals-studio/core/blocks/BlogList.astro';
+import { breadcrumbList } from '@e-visuals-studio/core';
+import { t } from '@e-visuals-studio/core/brief';
+import Page from '../../components/Page.astro';
+import { brief } from '../../brief';
+import { BLOG_PATH, ui } from '../../i18n';
+import { getPostItems } from '../../posts';
+import { describe, siteName } from '../../site';
+
+const s = ui.sl;
+const posts = await getPostItems();
+---
+
+<Page
+  title={s.blogTitle}
+  description={describe('sl', `${s.blogDescription} – ${siteName}, ${t(brief.stranka.dejavnost, 'sl')}.`)}
+  jsonLd={breadcrumbList([
+    { name: s.home, url: new URL('/', Astro.site) },
+    { name: s.blog, url: new URL(BLOG_PATH, Astro.site) },
+  ])}
+>
+  <BlogList title={s.blogTitle} headingLevel={1} posts={posts} emptyText={s.blogEmpty} />
+</Page>

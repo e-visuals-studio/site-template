@@ -1,0 +1,101 @@
+---
+/** Domača stran: bloki iz core, vsebina iz briefa. */
+import Hero from '@e-visuals-studio/core/blocks/Hero.astro';
+import Features from '@e-visuals-studio/core/blocks/Features.astro';
+import About from '@e-visuals-studio/core/blocks/About.astro';
+import Gallery from '@e-visuals-studio/core/blocks/Gallery.astro';
+import FAQ from '@e-visuals-studio/core/blocks/FAQ.astro';
+import BlogList from '@e-visuals-studio/core/blocks/BlogList.astro';
+import CTA from '@e-visuals-studio/core/blocks/CTA.astro';
+import Contact from '@e-visuals-studio/core/blocks/Contact.astro';
+import { graph, website } from '@e-visuals-studio/core';
+import { localBusinessFromBrief, openingHoursText, paragraphs, postalAddress, t } from '@e-visuals-studio/core/brief';
+import Page from '../components/Page.astro';
+import { brief } from '../brief';
+import { BLOG_PATH, routes, ui, type Lang } from '../i18n';
+import { image } from '../images';
+import { getPostItems } from '../posts';
+import { cta, languages, siteName } from '../site';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const s = ui[lang];
+const r = routes[lang];
+const url = new URL(r.home, Astro.site);
+const hero = image(brief.slike.hero, lang);
+const posts = lang === 'sl' ? await getPostItems(3) : [];
+---
+
+<Page
+  lang={lang}
+  page="home"
+  title={`${siteName} – ${t(brief.stranka.dejavnost, lang)}`}
+  titleTemplate="%s"
+  description={t(brief.stranka.opis, lang)}
+  image={hero.src}
+  imageAlt={hero.alt}
+  jsonLd={graph(
+    website({ name: siteName, url, inLanguage: languages }),
+    localBusinessFromBrief(brief, { url, lang, image: new URL(hero.src.src, Astro.site) }),
+  )}
+>
+  <Hero
+    eyebrow={siteName}
+    title={t(brief.stranka.dejavnost, lang)}
+    lead={t(brief.stranka.uvod, lang)}
+    image={hero}
+    primaryCta={cta(lang)}
+    secondaryCta={{ label: s.ourServices, href: r.services }}
+  />
+
+  <Features
+    id={lang === 'sl' ? 'storitve' : 'services'}
+    eyebrow={s.services}
+    title={s.ourServices}
+    items={brief.storitve.map((x) => ({ title: t(x.ime, lang), text: t(x.opis, lang) }))}
+  />
+
+  <About
+    id={lang === 'sl' ? 'o-nas' : 'about'}
+    eyebrow={s.about}
+    title={siteName}
+    text={paragraphs(brief.stranka.oNas, lang)[0]}
+    image={image(brief.slike.oNas, lang)}
+  />
+
+  {
+    brief.reference.length > 0 && (
+      <Gallery
+        id={lang === 'sl' ? 'reference' : 'references'}
+        title={lang === 'sl' ? 'Reference' : 'References'}
+        images={brief.reference.map((ref) => ({ ...image(ref.slika, lang), caption: t(ref.naslov, lang) }))}
+      />
+    )
+  }
+
+  {
+    brief.pogostaVprasanja.length > 0 && (
+      <FAQ
+        title={s.faq}
+        items={brief.pogostaVprasanja.map((q) => ({ question: t(q.vprasanje, lang), answer: t(q.odgovor, lang) }))}
+      />
+    )
+  }
+
+  {posts.length > 0 && <BlogList title={s.blogLatest} posts={posts} more={{ label: s.blogAll, href: BLOG_PATH }} />}
+
+  <CTA title={s.ctaTitle} text={s.ctaText} cta={cta(lang)} />
+
+  <Contact
+    id={lang === 'sl' ? 'kontakt' : 'contact'}
+    title={s.contact}
+    intro={s.contactIntro}
+    email={brief.kontakt.email}
+    phone={brief.kontakt.telefon}
+    address={postalAddress(brief)}
+    openingHours={openingHoursText(brief, lang)}
+  />
+</Page>

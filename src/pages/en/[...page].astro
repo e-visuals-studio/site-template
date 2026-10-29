@@ -1,0 +1,29 @@
+---
+/**
+ * Angleške strani: obstajajo samo, če ima brief jezik `en` (sicer getStaticPaths ne vrne poti).
+ */
+import type { GetStaticPaths } from 'astro';
+import Home from '../../views/Home.astro';
+import About from '../../views/About.astro';
+import Services from '../../views/Services.astro';
+import Contact from '../../views/Contact.astro';
+import Privacy from '../../views/Privacy.astro';
+import { brief } from '../../brief';
+
+const VIEWS = { home: Home, about: About, services: Services, contact: Contact, privacy: Privacy };
+
+export const getStaticPaths = (() => {
+  if (!brief.jeziki.includes('en')) return [];
+  return [
+    { params: { page: undefined }, props: { view: 'home' } },
+    { params: { page: 'about' }, props: { view: 'about' } },
+    { params: { page: 'services' }, props: { view: 'services' } },
+    { params: { page: 'contact' }, props: { view: 'contact' } },
+    { params: { page: 'privacy' }, props: { view: 'privacy' } },
+  ] as const;
+}) satisfies GetStaticPaths;
+
+const View = VIEWS[Astro.props.view as keyof typeof VIEWS];
+---
+
+<View lang="en" />

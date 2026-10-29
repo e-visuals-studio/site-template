@@ -1,0 +1,46 @@
+---
+import Hero from '@e-visuals-studio/core/blocks/Hero.astro';
+import Features from '@e-visuals-studio/core/blocks/Features.astro';
+import FAQ from '@e-visuals-studio/core/blocks/FAQ.astro';
+import CTA from '@e-visuals-studio/core/blocks/CTA.astro';
+import { breadcrumbList } from '@e-visuals-studio/core';
+import { t } from '@e-visuals-studio/core/brief';
+import Page from '../components/Page.astro';
+import { brief } from '../brief';
+import { routes, ui, type Lang } from '../i18n';
+import { cta, describe, siteName } from '../site';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const s = ui[lang];
+const names = brief.storitve.map((x) => t(x.ime, lang));
+---
+
+<Page
+  lang={lang}
+  page="services"
+  title={s.services}
+  description={describe(lang, `${s.services}: ${names.join(', ')}.`, `${siteName}, ${t(brief.stranka.dejavnost, lang)}.`)}
+  jsonLd={breadcrumbList([
+    { name: s.home, url: new URL(routes[lang].home, Astro.site) },
+    { name: s.services, url: new URL(routes[lang].services, Astro.site) },
+  ])}
+>
+  <Hero eyebrow={siteName} title={s.services} lead={t(brief.stranka.uvod, lang)} primaryCta={cta(lang)} />
+  <Features
+    title={s.ourServices}
+    items={brief.storitve.map((x) => ({ title: t(x.ime, lang), text: t(x.opis, lang) }))}
+  />
+  {
+    brief.pogostaVprasanja.length > 0 && (
+      <FAQ
+        title={s.faq}
+        items={brief.pogostaVprasanja.map((q) => ({ question: t(q.vprasanje, lang), answer: t(q.odgovor, lang) }))}
+      />
+    )
+  }
+  <CTA title={s.ctaTitle} text={s.ctaText} cta={cta(lang)} />
+</Page>

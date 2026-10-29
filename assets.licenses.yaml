@@ -1,0 +1,24 @@
+# Register licenc (glej WEBSITE_FACTORY_PLAN.md, Avtorske pravice). Vsaka slika v repu mora imeti zapis.
+#
+# Polja: datoteka (pot ali vzorec * / **), avtor, vir, licenca, ai, url, datum, dokazilo.
+# avtor, vir in licenca so obvezni: build pade, če slika iz brief.yaml nima zapisa (@e-visuals-studio/core/brief).
+# Neznano še označi s TODO – produkcijski build ustavi `pnpm check:todo`.
+# ai: true samo za ilustracije (nikoli ljudje, ekipa, objekt ali izdelek stranke, ne v referencah).
+
+- datoteka: src/assets/placeholders/*.jpg
+  avtor: factory-placeholders (@e-visuals-studio/core)
+  vir: generirano iz tokens.json
+  licenca: brez (lastno delo, brez tujih vsebin)
+  ai: false
+
+- datoteka: public/favicon.svg
+  avtor: e-visuals
+  vir: lastno delo
+  licenca: brez (lastno delo)
+  ai: false
+
+- datoteka: dist/og/**/*.png
+  avtor: e-visuals
+  vir: generirano ob buildu (@e-visuals-studio/core, satori)
+  licenca: brez (lastno delo); font Inter (OFL-1.1, @fontsource/inter)
+  ai: false

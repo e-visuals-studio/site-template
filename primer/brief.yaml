@@ -1,0 +1,101 @@
+# IZMIŠLJEN PRIMER – ni stranka. Samo za demo, Lighthouse in CI templata (BRIEF=primer).
+# Podatki so namenoma očitno lažni (domena .example, matična 0000000). Nikoli ga ne kopiraj v brief.yaml stranke.
+
+stranka:
+  ime: Mizarstvo Vzorec
+  dejavnost:
+    sl: Pohištvo po meri iz masivnega lesa
+    en: Custom furniture made from solid wood
+  opis:
+    sl: Mizarska delavnica za kuhinje, vgradne omare in jedilne mize po meri iz masivnega lesa. Izmera, izris, izdelava in montaža.
+    en: A joinery workshop making kitchens, built-in wardrobes and dining tables from solid wood. Measuring, design, build and fitting.
+  uvod:
+    sl: Kuhinje, vgradne omare in jedilne mize iz masivnega lesa. Izmerimo, izrišemo, izdelamo in montiramo sami.
+    en: Kitchens, built-in wardrobes and dining tables made from solid wood. We measure, design, build and fit everything ourselves.
+  oNas:
+    sl: |
+      Smo manjša družinska mizarska delavnica. Vsak projekt vodi en mizar, od prve izmere do montaže.
+
+      To je izmišljen primer za predstavitev templata, ne resnično podjetje.
+    en: |
+      We are a small family joinery workshop. Each project is led by one joiner, from the first measurement to fitting.
+
+      This is a fictional example used to demonstrate the template, not a real company.
+  schemaTip: HomeAndConstructionBusiness
+
+domena: https://www.mizarstvo-vzorec.example
+jeziki: [sl, en]
+
+kontakt:
+  email: info@mizarstvo-vzorec.example
+  telefon: +386 1 000 00 00
+
+naslov:
+  ulica: Vzorčna ulica 1
+  postnaStevilka: '1000'
+  kraj: Ljubljana
+  drzava: SI
+
+lokacija:
+  obmocje: Osrednjeslovenska regija
+  geo: null
+
+delovniCas:
+  - { dnevi: [Mo, Tu, We, Th, Fr], od: '07:00', do: '15:00' }
+
+storitve:
+  - ime: { sl: Kuhinje po meri, en: Custom kitchens }
+    opis:
+      sl: Fronte iz masivnega lesa ali furnirja, pulti iz lesa, kamna ali kompaktnih plošč.
+      en: Solid wood or veneer fronts, worktops in wood, stone or compact laminate.
+  - ime: { sl: Vgradne omare, en: Built-in wardrobes }
+    opis:
+      sl: Garderobe in omare v mansardah ali pod stopnicami, ki izkoristijo ves prostor.
+      en: Wardrobes and cupboards in attics or under stairs that use every bit of space.
+  - ime: { sl: Jedilne mize, en: Dining tables }
+    opis:
+      sl: Mize iz enega kosa lesa z lesenim ali jeklenim podnožjem, po vaših merah.
+      en: Single-slab tables with a wooden or steel base, made to your measurements.
+  - ime: { sl: Obnova pohištva, en: Furniture restoration }
+    opis:
+      sl: Brušenje, oljenje in popravila starejšega masivnega pohištva.
+      en: Sanding, oiling and repairing older solid wood furniture.
+
+pogostaVprasanja:
+  - vprasanje: { sl: Ali pridete na izmero?, en: Do you come to measure? }
+    odgovor:
+      sl: Da, prostor izmerimo pri vas in nato pripravimo izris.
+      en: Yes, we measure the room on site and then prepare a drawing.
+  - vprasanje: { sl: Ali delate tudi manjša naročila?, en: Do you take on small jobs? }
+    odgovor:
+      sl: Da, izdelamo tudi posamezne kose pohištva.
+      en: Yes, we also make individual pieces of furniture.
+
+reference: []
+socialnaOmrezja: []
+
+kljucneBesede:
+  sl: [mizarstvo, kuhinje po meri, vgradne omare, pohištvo iz masivnega lesa]
+  en: [joinery, custom kitchens, built-in wardrobes, solid wood furniture]
+
+analitika:
+  ponudnik: none
+  scriptUrl: null
+
+pravno:
+  naziv: Mizarstvo Vzorec d.o.o. (izmišljen primer)
+  maticna: '0000000'
+  davcna: SI00000000
+  sedez: Vzorčna ulica 1, 1000 Ljubljana
+
+slike:
+  hero:
+    datoteka: src/assets/placeholders/hero.jpg
+    alt:
+      sl: Barvni placeholder namesto fotografije kuhinje
+      en: Colour placeholder instead of a kitchen photo
+  oNas:
+    datoteka: src/assets/placeholders/about.jpg
+    alt:
+      sl: Barvni placeholder namesto fotografije delavnice
+      en: Colour placeholder instead of a workshop photo

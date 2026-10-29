@@ -1,0 +1,10 @@
+# Varnost dobavne verige (glej WEBSITE_FACTORY_PLAN.md, Varnost):
+# nove verzije paketov namestimo šele po 3 dneh, build skripti odvisnosti so privzeto blokirani.
+minimumReleaseAge: 4320
+onlyBuiltDependencies:
+  - esbuild
+  # core iz git taga se ob namestitvi zgradi (prepare → dist/); pnpm zahteva točno referenco s commitom.
+  # Posodobi jo `pnpm core:update vX.Y.Z` (skupaj z odvisnostjo v package.json).
+  - "@e-visuals-studio/core@https://codeload.github.com/e-visuals-studio/factory-core/tar.gz/01d012e598e747681fe14257a0587b384cb6b696#path:packages/core"
+ignoredBuiltDependencies:
+  - sharp

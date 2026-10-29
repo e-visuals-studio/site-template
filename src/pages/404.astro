@@ -1,0 +1,15 @@
+---
+import Page from '../components/Page.astro';
+import { ui } from '../i18n';
+
+const s = ui.sl;
+---
+
+<Page title={s.notFoundTitle} description={s.notFoundDescription} noindex>
+  <div class="wrap-prose py-section text-center">
+    <p class="eyebrow">404</p>
+    <h1 class="mt-4 text-4xl font-bold">{s.notFoundTitle}</h1>
+    <p class="mt-4 text-on-surface-muted">{s.notFoundText}</p>
+    <a href="/" class="btn btn-primary mt-8">{s.notFoundCta}</a>
+  </div>
+</Page>

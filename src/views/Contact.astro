@@ -1,0 +1,44 @@
+---
+import Hero from '@e-visuals-studio/core/blocks/Hero.astro';
+import Contact from '@e-visuals-studio/core/blocks/Contact.astro';
+import { breadcrumbList, graph } from '@e-visuals-studio/core';
+import { localBusinessFromBrief, openingHoursText, postalAddress } from '@e-visuals-studio/core/brief';
+import Page from '../components/Page.astro';
+import { brief } from '../brief';
+import { routes, ui, type Lang } from '../i18n';
+import { describe, siteName } from '../site';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const s = ui[lang];
+const url = new URL(routes[lang].contact, Astro.site);
+const { ulica, postnaStevilka, kraj } = brief.naslov;
+---
+
+<Page
+  lang={lang}
+  page="contact"
+  title={s.contact}
+  description={describe(lang, `${s.contact} – ${siteName}: ${ulica}, ${postnaStevilka} ${kraj}, ${brief.kontakt.telefon}, ${brief.kontakt.email}.`)}
+  jsonLd={graph(
+    localBusinessFromBrief(brief, { url: new URL(routes[lang].home, Astro.site), lang }),
+    breadcrumbList([
+      { name: s.home, url: new URL(routes[lang].home, Astro.site) },
+      { name: s.contact, url },
+    ]),
+  )}
+>
+  <Hero eyebrow={siteName} title={s.contact} lead={s.contactIntro} />
+  {/* Obrazec pride v fazi 4 (Worker); do takrat samo kontaktni podatki. */}
+  <Contact
+    id={lang === 'sl' ? 'kontakt' : 'contact'}
+    title={siteName}
+    email={brief.kontakt.email}
+    phone={brief.kontakt.telefon}
+    address={postalAddress(brief)}
+    openingHours={openingHoursText(brief, lang)}
+  />
+</Page>

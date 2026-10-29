@@ -1,0 +1,34 @@
+---
+/**
+ * <Page> – BaseLayout iz core + Header in Footer iz briefa. Vsaka stran templata ga uporablja.
+ */
+import BaseLayout from '@e-visuals-studio/core/layouts/BaseLayout.astro';
+import Header from '@e-visuals-studio/core/blocks/Header.astro';
+import Footer from '@e-visuals-studio/core/blocks/Footer.astro';
+import type { SEOProps } from '@e-visuals-studio/core/seo/SEO.astro';
+import { routes, type Lang, type PageKey } from '../i18n';
+import { alternates, cta, footer, languageSwitch, nav, siteName } from '../site';
+
+interface Props extends Omit<SEOProps, 'siteName' | 'lang' | 'alternates'> {
+  lang?: Lang;
+  /** Stran z jezikovnimi različicami (za hreflang in preklop jezika); `null` za strani samo v SL. */
+  page?: PageKey | null;
+}
+
+const { lang = 'sl', page = null, ...seo } = Astro.props;
+---
+
+<BaseLayout {...seo} siteName={siteName} lang={lang} alternates={alternates(page)}>
+  <Header
+    slot="header"
+    siteName={siteName}
+    homeHref={routes[lang].home}
+    nav={nav(lang)}
+    cta={cta(lang)}
+    languageSwitch={languageSwitch(lang, page)}
+    menuLabel={lang === 'sl' ? 'Meni' : 'Menu'}
+    navLabel={lang === 'sl' ? 'Glavna navigacija' : 'Main navigation'}
+  />
+  <slot />
+  <Footer slot="footer" siteName={siteName} {...footer(lang)} />
+</BaseLayout>

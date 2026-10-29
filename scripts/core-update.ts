@@ -6,6 +6,7 @@
  * Nato požene `pnpm install`. Ko bo core na npm, ta skript odpade (glej README v factory-core, Distribucija).
  */
 import { execFileSync } from 'node:child_process';
+import { existsSync } from 'node:fs';
 import { readFile, writeFile } from 'node:fs/promises';
 
 const REPO = 'e-visuals-studio/factory-core';
@@ -44,3 +45,17 @@ await writeFile(wsPath, ws.replace(pattern, allow));
 
 console.log(`✓ ${PACKAGE} → ${tag} (${commit.slice(0, 7)})`);
 execFileSync('pnpm', ['install'], { stdio: 'inherit' });
+
+// Zaščita: lockfile mora hraniti `path: packages/core`, sicer `pnpm install --frozen-lockfile` (CI, nov klon)
+// razpakira cel monorepo namesto paketa. Opaženo po neuspeli namestitvi; rešitev je nov lockfile.
+const lock = await readFile(new URL('../pnpm-lock.yaml', import.meta.url), 'utf8');
+const installed = new URL('../node_modules/@e-visuals-studio/core/', import.meta.url);
+const ok =
+  new RegExp(`resolution: \\{gitHosted: true, path: packages/core, tarball: [^}]*${commit}`).test(lock) &&
+  existsSync(new URL('dist/integration.js', installed)) &&
+  JSON.parse(await readFile(new URL('package.json', installed), 'utf8')).name === PACKAGE;
+if (!ok) {
+  console.error(`✗ lockfile ali node_modules ne vsebuje ${PACKAGE} iz packages/core. Izbriši pnpm-lock.yaml in node_modules ter ponovi pnpm install.`);
+  process.exit(1);
+}
+console.log('✓ lockfile in node_modules preverjena (packages/core, dist/)');

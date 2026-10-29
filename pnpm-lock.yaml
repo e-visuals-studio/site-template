@@ -111,7 +111,7 @@ packages:
     engines: {node: '>= 20.12.0'}
 
   '@e-visuals-studio/core@https://codeload.github.com/e-visuals-studio/factory-core/tar.gz/01d012e598e747681fe14257a0587b384cb6b696#path:packages/core':
-    resolution: {gitHosted: true, integrity: sha512-Iew6FY6Dd6QQN3/oWOBE7TNl22RixmWHJkdRK5TB4uhIEA2TrIkfijEmrATfZNyH6/ypNONswX7m74wzwX83fQ==, tarball: https://codeload.github.com/e-visuals-studio/factory-core/tar.gz/01d012e598e747681fe14257a0587b384cb6b696}
+    resolution: {gitHosted: true, path: packages/core, tarball: https://codeload.github.com/e-visuals-studio/factory-core/tar.gz/01d012e598e747681fe14257a0587b384cb6b696}
     version: 0.1.0
     hasBin: true
     peerDependencies:

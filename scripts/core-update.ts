@@ -46,12 +46,20 @@ await writeFile(wsPath, ws.replace(pattern, allow));
 console.log(`✓ ${PACKAGE} → ${tag} (${commit.slice(0, 7)})`);
 execFileSync('pnpm', ['install'], { stdio: 'inherit' });
 
-// Zaščita: lockfile mora hraniti `path: packages/core`, sicer `pnpm install --frozen-lockfile` (CI, nov klon)
-// razpakira cel monorepo namesto paketa. Opaženo po neuspeli namestitvi; rešitev je nov lockfile.
-const lock = await readFile(new URL('../pnpm-lock.yaml', import.meta.url), 'utf8');
+// pnpm 10 ob PRVI razrešitvi novega commita zapiše v lockfile `integrity` brez `path: packages/core`;
+// `pnpm install --frozen-lockfile` (CI, nov klon) bi nato razpakiral cel monorepo namesto paketa.
+// Ko je tarball že v store-u, ponovna razrešitev zapiše pravilno – zato po potrebi še `pnpm update` samo za core.
+const lockUrl = new URL('../pnpm-lock.yaml', import.meta.url);
 const installed = new URL('../node_modules/@e-visuals-studio/core/', import.meta.url);
+const lockHasPath = async () =>
+  new RegExp(`resolution: \\{gitHosted: true, path: packages/core, tarball: [^}]*${commit}`).test(await readFile(lockUrl, 'utf8'));
+
+if (!(await lockHasPath())) {
+  console.log('↻ lockfile brez path: packages/core – ponovna razrešitev core');
+  execFileSync('pnpm', ['update', PACKAGE], { stdio: 'inherit' });
+}
 const ok =
-  new RegExp(`resolution: \\{gitHosted: true, path: packages/core, tarball: [^}]*${commit}`).test(lock) &&
+  (await lockHasPath()) &&
   existsSync(new URL('dist/integration.js', installed)) &&
   JSON.parse(await readFile(new URL('package.json', installed), 'utf8')).name === PACKAGE;
 if (!ok) {

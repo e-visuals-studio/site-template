@@ -1,7 +1,7 @@
 # CLAUDE.md – stran stranke (iz e-visuals-studio/site-template)
 
 Astro stran na `@e-visuals-studio/core` (factory-core). Plan tovarne: `WEBSITE_FACTORY_PLAN.md` v factory-core.
-Ukazi in koraki: `README.md`. Node ≥ 22.12 (`nvm use`), pnpm prek corepacka.
+Ukazi in koraki: `README.md`. Node 22.23.4 (`nvm use`), pnpm prek corepacka.
 
 ## Podatki stranke
 
@@ -24,11 +24,14 @@ Ukazi in koraki: `README.md`. Node ≥ 22.12 (`nvm use`), pnpm prek corepacka.
 - Vsaka slika ima zapis v `assets.licenses.yaml` (`avtor`, `vir`, `licenca`, `ai`); za slike iz briefa build brez zapisa pade.
 - AI slike (`ai: true`) samo kot ilustracija: nikoli ljudje, ekipa, objekt ali izdelek stranke, ne v referencah.
 - Slike samo prek `<Image>` iz `astro:assets` (bloki iz core to naredijo sami).
+- Vhodne slike samo JPG, PNG ali WebP. AVIF in HEIC (iPhone fotografije) nista dovoljena kot vhod (libheif, GHSA-26w7-cxv4-gfx2): build ju zavrne po vsebini, tudi preimenovana. Sliko pretvori; varovala ne obidi z lastnim image servisom.
 
 **Komponente in strani**
 - Strani so samo kompozicija blokov iz core (`src/views/`, `src/pages/`); vsaka uporablja `<Page>` (ta vključi `BaseLayout` in `<SEO>`). En `<h1>` na stran, description 50–160 znakov.
 - Kode iz core ne kopiraj. Blok, ki ga stranka potrebuje drugačen, prekrij v `src/blocks/` samo z razlogom (komentar zakaj); nova splošna komponenta gre najprej v factory-core.
 - Brez JavaScripta; interaktivnost samo kot Astro island z razlogom. Analitika samo prek `factory({ analytics })` (iz briefa), nikoli ročno vstavljenih skript.
+- `src/fetch.ts` je v Astro 7 rezervirano ime; ne ustvarjaj datoteke s tem imenom.
+- Astro 7 pod agentom `astro dev`/`astro preview` zažene v ozadju (`astro dev status`, ustavi z `astro dev stop`); strežnik v ospredju z `--ignore-lock`.
 
 **Jezik in odprta koda**
 - Besedila na straneh, komentarji, commit sporočila in PR opisi so v slovenščini (angleške strani samo, če brief vsebuje `en`).

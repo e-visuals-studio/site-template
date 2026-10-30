@@ -1,6 +1,6 @@
 # site-template
 
-GitHub Template za strani strank Website Factory (e-visuals). Astro 6 na [`@e-visuals-studio/core`](https://github.com/e-visuals-studio/factory-core): bloki, SEO, JSON-LD, analitika in tokeni so iz core, tu so samo **podatki stranke (`brief.yaml`)** in kompozicija strani.
+GitHub Template za strani strank Website Factory (e-visuals). Astro 7 na [`@e-visuals-studio/core`](https://github.com/e-visuals-studio/factory-core): bloki, SEO, JSON-LD, analitika in tokeni so iz core, tu so samo **podatki stranke (`brief.yaml`)** in kompozicija strani.
 
 ## Nova stranka: od nič do lokalnega zagona
 
@@ -10,7 +10,7 @@ gh repo create e-visuals-studio/client-<ime> --private --template e-visuals-stud
 cd client-<ime>
 
 # 2. Orodja
-nvm use              # Node iz .nvmrc (≥ 22.12)
+nvm use              # Node iz .nvmrc (22.23.4)
 corepack enable      # pnpm iz package.json
 pnpm install         # core se namesti iz git taga in zgradi (prepare)
 

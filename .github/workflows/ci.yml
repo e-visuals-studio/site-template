@@ -1,4 +1,4 @@
-# CI strani: reusable workflow site.yml iz factory-core (glej README v factory-core, CI).
+# CI in deploy strani: reusable workflow site.yml iz factory-core (glej README v factory-core, CI in Deploy).
 # Tag site.yml je vedno enak tagu paketa @e-visuals-studio/core; oba posodobi `pnpm core:update vX.Y.Z`.
 name: CI
 
@@ -12,14 +12,25 @@ permissions:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  # Na PR-ju nov push prekliče starega; na main se teki ne prekinjajo (produkcijski deploy ne sme obstati na pol).
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   site:
     name: stran
-    uses: e-visuals-studio/factory-core/.github/workflows/site.yml@v0.2.1
+    uses: e-visuals-studio/factory-core/.github/workflows/site.yml@v0.3.0
     permissions:
       contents: read
+      pull-requests: write # komentar s preview povezavo
     with:
       # brief.yaml v templatu je poln TODO; CI gradi izmišljen primer. Repozitorij stranke to vrstico odstrani.
       brief: primer
+      # Cloudflare Worker (račun stranke). Repozitorij stranke nastavi svoje ime.
+      worker-name: site-template
+      cloudflare-account-id: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+      # Samo v templatu: domena ni iz briefa (primer ima izmišljeno), stran je izmišljen primer in ne sme v iskalnike.
+      # Repozitorij stranke obe vrstici odstrani (domena iz brief.yaml, indeksirana).
+      site-url: https://factory.krizaj.net
+      noindex: true
+    secrets:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}

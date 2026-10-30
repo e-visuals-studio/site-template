@@ -66,17 +66,35 @@ tests/                  testi buildov (preview, primer, check:todo)
 | `GITHUB_REF_NAME` / `CF_PAGES_BRANCH` | nastavi CI; vse razen `main` je preview |
 | `ANALYTICS_ID` | Umami websiteId ali GA4 measurementId (ponudnik je v briefu); obvezen v produkcijskem buildu, če ponudnik ni `none` |
 | `BRIEF` | samo `primer` (izmišljen primer) |
-| `SITE_URL` | samo za lokalni Lighthouse (canonical na `http://localhost`) |
+| `SITE_URL` | lokalni Lighthouse (`http://localhost`) in deploy templata (`site-url: https://factory.krizaj.net` v CI); stranka ga ne nastavi (domena iz briefa) |
+| `SITE_NOINDEX` | `true`: produkcijski build z noindex (meta, `X-Robots-Tag`), `robots.txt` odprt; samo template (`noindex: true` v CI) |
 
 **Preview** (branch ≠ `main` ali `SITE_ENV=preview`): `robots.txt` z `Disallow: /`, `<meta name="robots" content="noindex">` na vseh straneh, brez analitike, TODO je dovoljen. **Produkcija** (`main`): `pnpm check:todo` mora uspeti.
 
 ## CI
 
-`.github/workflows/ci.yml` (PR in push na `main`) pokliče reusable workflow `site.yml` iz factory-core: `pnpm install --frozen-lockfile`, `build`, `check`, `check:tokens`, `test`, `lighthouse` in na pushu v `main` še `check:todo`. Build teče s `SITE_ENV=production` (na PR-ju sicer preview z noindex). Brez deploya – ta pride v fazi 4.
+`.github/workflows/ci.yml` (PR in push na `main`) pokliče reusable workflow `site.yml` iz factory-core: `pnpm install --frozen-lockfile`, `build`, `check`, `check:tokens`, `test`, `lighthouse` in na pushu v `main` še `check:todo`. Build teče s `SITE_ENV=production` (na PR-ju sicer preview z noindex). Po zelenih checkih sledi deploy na Cloudflare Workers (spodaj).
 
 - `site.yml` je na istem tagu kot `@e-visuals-studio/core`; oba posodobi `pnpm core:update vX.Y.Z`. Dependabot (`.github/dependabot.yml`) posodablja samo druge akcije, `site.yml` izpusti.
 - V templatu CI gradi izmišljen primer (`brief: primer`), ker je `brief.yaml` poln TODO. **Repozitorij stranke vrstico `brief: primer` odstrani**, da CI gradi njen `brief.yaml` (in na `main` `check:todo` zahteva izpolnjen brief).
 - `main` je zaščiten z rulesetom: samo prek PR-ja z zelenim CI, brez force pusha in brisanja; pregled drugega človeka ni obvezen, admin ni izvzet. Repozitorij stranke ustvarjen iz templata rulesetov ne podeduje – nastavi ga ob zagonu enako kot v site-template.
+
+## Deploy (Cloudflare Workers)
+
+Stran je Worker samo s statičnimi datotekami (`wrangler.jsonc`, `wrangler` kot devDependency); gradi in nalaga GitHub Actions prek `site.yml`, Cloudflare ne gradi ničesar.
+
+- **PR** → preview `https://pr-<št.>-<worker>.<podomena>.workers.dev` (noindex, brez analitike), povezava v komentarju na PR. Produkcija se ne spremeni.
+- **push na `main`** (po zelenih checkih) → `wrangler deploy` na produkcijsko domeno in smoke test.
+- Template se objavlja na `https://factory.krizaj.net` (izmišljen primer, `noindex: true`).
+- **Rollback**: Cloudflare dashboard → Workers & Pages → Worker → Deployments → izbrana verzija → Deploy.
+
+**Nova stranka** (Cloudflare račun stranke, ti si član):
+
+1. Cloudflare: workers.dev podomena računa (Workers & Pages), Account ID.
+2. API token: My Profile → API Tokens → Create Custom Token → samo **Account → Workers Scripts → Edit**, samo račun stranke, brez cone, z rokom veljavnosti.
+3. GitHub repo stranke → Settings → Secrets and variables → Actions: secret `CLOUDFLARE_API_TOKEN`, variable `CLOUDFLARE_ACCOUNT_ID`.
+4. `.github/workflows/ci.yml`: `worker-name` = ime stranke (npr. `client-ime`), odstrani `brief: primer`, `site-url` in `noindex`.
+5. Merge v `main` ustvari Worker. Nato Worker → Settings → Domains & Routes → Add → Custom domain → domena stranke (ne sme imeti obstoječega CNAME zapisa). Do takrat smoke test javi le opozorilo.
 
 ## Posodobitev core
 

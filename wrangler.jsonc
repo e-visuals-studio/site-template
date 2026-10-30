@@ -1,0 +1,17 @@
+// Cloudflare Worker samo s statičnimi datotekami (Workers static assets); deploy prek site.yml iz factory-core.
+// Ime Workerja poda CI (vhod worker-name v .github/workflows/ci.yml), zato ga tu ni.
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  // Datum, ki ga podpira workerd iz nameščenega wranglerja; posodobi ob nadgradnji wranglerja.
+  "compatibility_date": "2026-10-23",
+  "assets": {
+    "directory": "./dist",
+    // dist/404.html s statusom 404
+    "not_found_handling": "404-page",
+    // /o-nas/ ↔ o-nas/index.html (trailingSlash: 'always' v astro.config)
+    "html_handling": "auto-trailing-slash"
+  },
+  // Produkcija samo na custom domeni; preview URL-ji (pr-<št.>-<worker>.<podomena>.workers.dev) ostanejo.
+  "workers_dev": false,
+  "preview_urls": true
+}

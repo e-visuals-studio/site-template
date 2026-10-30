@@ -49,4 +49,6 @@ pnpm build && pnpm check && pnpm check:tokens && pnpm test
 
 `main` je zaščiten z rulesetom: vse prek PR-ja, ki ga združiš šele, ko je zelen CI (`.github/workflows/ci.yml` → `site.yml` iz factory-core). Core posodobi samo s `pnpm core:update vX.Y.Z` – paket in `site.yml@vX.Y.Z` morata biti na istem tagu; vrstice `uses:` ne spreminjaj ročno.
 
+Deploy na Cloudflare samo prek CI (`site.yml`): preview na PR, produkcija po mergu v `main`. Nikoli ročni `wrangler deploy` na produkcijo, nikoli API tokena v repozitoriju ali logu. Custom domeno in DNS ureja človek v dashboardu. `wrangler.jsonc` ostane brez imena Workerja (poda ga `worker-name` v `ci.yml`).
+
 Pred produkcijo (merge v `main`) še `pnpm check:todo` (brez TODO v buildu, briefu, pravnih besedilih in registru licenc) in `SITE_ENV=production SITE_URL=http://localhost pnpm build && pnpm lighthouse` (≥ 95 v vseh kategorijah, mobilno).

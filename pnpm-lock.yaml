@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@e-visuals-studio/core':
-        specifier: github:e-visuals-studio/factory-core#v0.2.0&path:packages/core
-        version: https://codeload.github.com/e-visuals-studio/factory-core/tar.gz/dfd60106414add407a6b069fb9eaeea6c9b6844e#path:packages/core(@types/node@22.20.5)(astro@7.4.2(@types/node@22.20.5)(esbuild@0.27.7)(jiti@2.7.0)(yaml@2.9.1))(vite@8.3.5(@types/node@22.20.5)(esbuild@0.27.7)(jiti@2.7.0)(yaml@2.9.1))
+        specifier: github:e-visuals-studio/factory-core#v0.2.1&path:packages/core
+        version: https://codeload.github.com/e-visuals-studio/factory-core/tar.gz/37d3d73b03213e2602ba18a7524bcf601a9a3a53#path:packages/core(@types/node@22.20.5)(astro@7.4.2(@types/node@22.20.5)(esbuild@0.27.7)(jiti@2.7.0)(yaml@2.9.1))(vite@8.3.5(@types/node@22.20.5)(esbuild@0.27.7)(jiti@2.7.0)(yaml@2.9.1))
       astro:
         specifier: ^7.4.2
         version: 7.4.2(@types/node@22.20.5)(esbuild@0.27.7)(jiti@2.7.0)(yaml@2.9.1)
@@ -227,9 +227,9 @@ packages:
     resolution: {integrity: sha512-dlT1m5e/0yUL0kRNcQn7yGLVThkgbB0Ga/1AmfDDC/8ik6AIiSf2QLQO2zPYvefsHP0aFgxO93cVLCCfDp7kzQ==}
     engines: {node: '>= 20.12.0'}
 
-  '@e-visuals-studio/core@https://codeload.github.com/e-visuals-studio/factory-core/tar.gz/dfd60106414add407a6b069fb9eaeea6c9b6844e#path:packages/core':
-    resolution: {gitHosted: true, path: packages/core, tarball: https://codeload.github.com/e-visuals-studio/factory-core/tar.gz/dfd60106414add407a6b069fb9eaeea6c9b6844e}
-    version: 0.2.0
+  '@e-visuals-studio/core@https://codeload.github.com/e-visuals-studio/factory-core/tar.gz/37d3d73b03213e2602ba18a7524bcf601a9a3a53#path:packages/core':
+    resolution: {gitHosted: true, path: packages/core, tarball: https://codeload.github.com/e-visuals-studio/factory-core/tar.gz/37d3d73b03213e2602ba18a7524bcf601a9a3a53}
+    version: 0.2.1
     hasBin: true
     peerDependencies:
       astro: ^7.2.8
@@ -3369,7 +3369,7 @@ snapshots:
       fast-wrap-ansi: 0.2.2
       sisteransi: 1.0.5
 
-  '@e-visuals-studio/core@https://codeload.github.com/e-visuals-studio/factory-core/tar.gz/dfd60106414add407a6b069fb9eaeea6c9b6844e#path:packages/core(@types/node@22.20.5)(astro@7.4.2(@types/node@22.20.5)(esbuild@0.27.7)(jiti@2.7.0)(yaml@2.9.1))(vite@8.3.5(@types/node@22.20.5)(esbuild@0.27.7)(jiti@2.7.0)(yaml@2.9.1))':
+  '@e-visuals-studio/core@https://codeload.github.com/e-visuals-studio/factory-core/tar.gz/37d3d73b03213e2602ba18a7524bcf601a9a3a53#path:packages/core(@types/node@22.20.5)(astro@7.4.2(@types/node@22.20.5)(esbuild@0.27.7)(jiti@2.7.0)(yaml@2.9.1))(vite@8.3.5(@types/node@22.20.5)(esbuild@0.27.7)(jiti@2.7.0)(yaml@2.9.1))':
     dependencies:
       '@astrojs/rss': 4.0.19
       '@astrojs/sitemap': 3.7.4

@@ -28,6 +28,7 @@
     "@astrojs/check": "^0.9.12",
     "@lhci/cli": "^0.15.1",
     "@types/node": "^22.0.0",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "wrangler": "^4.153.0"
   }
 }

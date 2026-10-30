@@ -56,7 +56,7 @@ tests/                  testi buildov (preview, primer, check:todo)
 | `pnpm placeholders` | placeholder slike iz `tokens.json` |
 | `pnpm test` | testi buildov: noindex na branchu ≠ `main`, `primer/` ne uide v build, `check:todo` |
 | `pnpm lighthouse` | Lighthouse CI na `dist/` (mobilno, ≥ 95); zgradi s `SITE_ENV=production SITE_URL=http://localhost`, Chromium iz `CHROME_PATH` |
-| `pnpm core:update vX.Y.Z` | preklop na drug tag factory-core (odvisnost + dovoljenje za build v `pnpm-workspace.yaml`) |
+| `pnpm core:update vX.Y.Z` | preklop na drug tag factory-core: odvisnost, dovoljenje za build v `pnpm-workspace.yaml` in `site.yml@vX.Y.Z` v `.github/workflows/ci.yml` (paket in CI vedno na istem tagu) |
 
 ## Okoljske spremenljivke
 
@@ -70,6 +70,14 @@ tests/                  testi buildov (preview, primer, check:todo)
 
 **Preview** (branch ≠ `main` ali `SITE_ENV=preview`): `robots.txt` z `Disallow: /`, `<meta name="robots" content="noindex">` na vseh straneh, brez analitike, TODO je dovoljen. **Produkcija** (`main`): `pnpm check:todo` mora uspeti.
 
+## CI
+
+`.github/workflows/ci.yml` (PR in push na `main`) pokliče reusable workflow `site.yml` iz factory-core: `pnpm install --frozen-lockfile`, `build`, `check`, `check:tokens`, `test`, `lighthouse` in na pushu v `main` še `check:todo`. Build teče s `SITE_ENV=production` (na PR-ju sicer preview z noindex). Brez deploya – ta pride v fazi 4.
+
+- `site.yml` je na istem tagu kot `@e-visuals-studio/core`; oba posodobi `pnpm core:update vX.Y.Z`. Dependabot (`.github/dependabot.yml`) posodablja samo druge akcije, `site.yml` izpusti.
+- V templatu CI gradi izmišljen primer (`brief: primer`), ker je `brief.yaml` poln TODO. **Repozitorij stranke vrstico `brief: primer` odstrani**, da CI gradi njen `brief.yaml` (in na `main` `check:todo` zahteva izpolnjen brief).
+- `main` je zaščiten z rulesetom: samo prek PR-ja z zelenim CI, brez force pusha in brisanja; pregled drugega človeka ni obvezen, admin ni izvzet. Repozitorij stranke ustvarjen iz templata rulesetov ne podeduje – nastavi ga ob zagonu enako kot v site-template.
+
 ## Posodobitev core
 
-Core je za zdaj git odvisnost na tag (`github:e-visuals-studio/factory-core#vX.Y.Z&path:packages/core`). Nova verzija: `pnpm core:update vX.Y.Z`, nato build in testi. Ko bo core na npm, bo to navadna semver odvisnost (posodablja Renovate) – glej README v factory-core, Distribucija.
+Core je za zdaj git odvisnost na tag (`github:e-visuals-studio/factory-core#vX.Y.Z&path:packages/core`). Nova verzija: `pnpm core:update vX.Y.Z` (posodobi tudi klic `site.yml` v CI na isti tag), nato build in testi. Ko bo core na npm, bo to navadna semver odvisnost (posodablja Renovate) – glej README v factory-core, Distribucija.

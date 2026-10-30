@@ -1,8 +1,9 @@
 /**
  * pnpm core:update vX.Y.Z
  *
- * Preklopi @e-visuals-studio/core na drug tag iz factory-core: posodobi odvisnost v package.json
- * in dovoljenje za build (prepare → dist/) v pnpm-workspace.yaml, ki ga pnpm 10 zahteva s točnim commitom.
+ * Preklopi @e-visuals-studio/core na drug tag iz factory-core: posodobi odvisnost v package.json,
+ * dovoljenje za build (prepare → dist/) v pnpm-workspace.yaml, ki ga pnpm 10 zahteva s točnim commitom,
+ * in klic reusable workflowa `site.yml@vX.Y.Z` v .github/workflows/ci.yml (paket in CI na istem tagu).
  * Nato požene `pnpm install`. Ko bo core na npm, ta skript odpade (glej README v factory-core, Distribucija).
  */
 import { execFileSync } from 'node:child_process';
@@ -28,11 +29,7 @@ if (!commit) {
   process.exit(1);
 }
 
-const pkgPath = new URL('../package.json', import.meta.url);
-const pkg = JSON.parse(await readFile(pkgPath, 'utf8'));
-pkg.dependencies[PACKAGE] = `github:${REPO}#${tag}&path:packages/core`;
-await writeFile(pkgPath, JSON.stringify(pkg, null, 2) + '\n');
-
+// Najprej preveri vse datoteke, nato piši – manjkajoča vrstica ne pusti napol posodobljenega repozitorija.
 const wsPath = new URL('../pnpm-workspace.yaml', import.meta.url);
 const allow = `  - "${PACKAGE}@https://codeload.github.com/${REPO}/tar.gz/${commit}#path:packages/core"`;
 const ws = await readFile(wsPath, 'utf8');
@@ -41,9 +38,24 @@ if (!pattern.test(ws)) {
   console.error(`V pnpm-workspace.yaml ni vrstice za ${PACKAGE} v onlyBuiltDependencies.`);
   process.exit(1);
 }
-await writeFile(wsPath, ws.replace(pattern, allow));
 
-console.log(`✓ ${PACKAGE} → ${tag} (${commit.slice(0, 7)})`);
+// CI kliče site.yml na istem tagu kot paket.
+const ciPath = new URL('../.github/workflows/ci.yml', import.meta.url);
+const ci = await readFile(ciPath, 'utf8');
+const usesPattern = new RegExp(`(uses:\\s*${REPO}/\\.github/workflows/site\\.yml@)\\S+`, 'g');
+if (!usesPattern.test(ci)) {
+  console.error(`V .github/workflows/ci.yml ni vrstice uses: ${REPO}/.github/workflows/site.yml@vX.Y.Z.`);
+  process.exit(1);
+}
+
+const pkgPath = new URL('../package.json', import.meta.url);
+const pkg = JSON.parse(await readFile(pkgPath, 'utf8'));
+pkg.dependencies[PACKAGE] = `github:${REPO}#${tag}&path:packages/core`;
+await writeFile(pkgPath, JSON.stringify(pkg, null, 2) + '\n');
+await writeFile(wsPath, ws.replace(pattern, allow));
+await writeFile(ciPath, ci.replace(usesPattern, `$1${tag}`));
+
+console.log(`✓ ${PACKAGE} in site.yml → ${tag} (${commit.slice(0, 7)})`);
 execFileSync('pnpm', ['install'], { stdio: 'inherit' });
 
 // pnpm 10 ob PRVI razrešitvi novega commita zapiše v lockfile `integrity` brez `path: packages/core`;

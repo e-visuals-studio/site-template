@@ -47,4 +47,6 @@ Preview (`SITE_ENV=preview`, sicer vsak branch razen `main` prek `GITHUB_REF_NAM
 pnpm build && pnpm check && pnpm check:tokens && pnpm test
 ```
 
+`main` je zaščiten z rulesetom: vse prek PR-ja, ki ga združiš šele, ko je zelen CI (`.github/workflows/ci.yml` → `site.yml` iz factory-core). Core posodobi samo s `pnpm core:update vX.Y.Z` – paket in `site.yml@vX.Y.Z` morata biti na istem tagu; vrstice `uses:` ne spreminjaj ročno.
+
 Pred produkcijo (merge v `main`) še `pnpm check:todo` (brez TODO v buildu, briefu, pravnih besedilih in registru licenc) in `SITE_ENV=production SITE_URL=http://localhost pnpm build && pnpm lighthouse` (≥ 95 v vseh kategorijah, mobilno).

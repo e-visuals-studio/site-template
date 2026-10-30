@@ -1,0 +1,25 @@
+# CI strani: reusable workflow site.yml iz factory-core (glej README v factory-core, CI).
+# Tag site.yml je vedno enak tagu paketa @e-visuals-studio/core; oba posodobi `pnpm core:update vX.Y.Z`.
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  site:
+    name: stran
+    uses: e-visuals-studio/factory-core/.github/workflows/site.yml@v0.2.1
+    permissions:
+      contents: read
+    with:
+      # brief.yaml v templatu je poln TODO; CI gradi izmišljen primer. Repozitorij stranke to vrstico odstrani.
+      brief: primer

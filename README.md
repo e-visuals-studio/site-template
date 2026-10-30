@@ -83,7 +83,7 @@ tests/                  testi buildov (preview, primer, check:todo)
 
 Stran je Worker samo s statičnimi datotekami (`wrangler.jsonc`, `wrangler` kot devDependency); gradi in nalaga GitHub Actions prek `site.yml`, Cloudflare ne gradi ničesar.
 
-- **PR** → preview `https://pr-<št.>-<worker>.<podomena>.workers.dev` (noindex, brez analitike), povezava v komentarju na PR. Produkcija se ne spremeni.
+- **PR** → preview `https://pr-<št.>-<worker>.<podomena>.workers.dev` (noindex, brez analitike), povezava v komentarju na PR (ob novem pushu se isti komentar posodobi). Alias vedno kaže zadnji commit, vsak commit ima še svoj URL (`<verzija>-<worker>.<podomena>.workers.dev`), ki ostane. Produkcija se ne spremeni.
 - **push na `main`** (po zelenih checkih) → `wrangler deploy` na produkcijsko domeno in smoke test.
 - Template se objavlja na `https://factory.krizaj.net` (izmišljen primer, `noindex: true`); previewi na `https://pr-<št.>-site-template.krizaj.workers.dev`. Produkcijski `site-template.krizaj.workers.dev` je izklopljen (`workers_dev: false`, Cloudflare vrne napako 1042).
 - **Rollback**: Cloudflare dashboard → Workers & Pages → Worker → Deployments → izbrana verzija → Deploy.

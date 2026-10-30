@@ -5,6 +5,6 @@ onlyBuiltDependencies:
   - esbuild
   # core iz git taga se ob namestitvi zgradi (prepare → dist/); pnpm zahteva točno referenco s commitom.
   # Posodobi jo `pnpm core:update vX.Y.Z` (skupaj z odvisnostjo v package.json).
-  - "@e-visuals-studio/core@https://codeload.github.com/e-visuals-studio/factory-core/tar.gz/5a93bcbe0bde49a14d8e10a4744bdd422cc590a8#path:packages/core"
+  - "@e-visuals-studio/core@https://codeload.github.com/e-visuals-studio/factory-core/tar.gz/be20de29c72ac395dd750be7b86e08084d49d0a4#path:packages/core"
 ignoredBuiltDependencies:
   - sharp

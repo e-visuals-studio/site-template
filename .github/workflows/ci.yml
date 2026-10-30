@@ -18,7 +18,7 @@ concurrency:
 jobs:
   site:
     name: stran
-    uses: e-visuals-studio/factory-core/.github/workflows/site.yml@v0.3.0
+    uses: e-visuals-studio/factory-core/.github/workflows/site.yml@v0.3.1
     permissions:
       contents: read
       pull-requests: write # komentar s preview povezavo
